@@ -1,3 +1,5 @@
+Locations = new Mongo.Collection('locations');
+
 if (Meteor.isClient) {
   Session.setDefault('latitude', "Loading");
   Session.setDefault('longitude', "Loading");
@@ -14,15 +16,17 @@ if (Meteor.isClient) {
   Template.location.events({
     'click button': function () {
       var location = Geolocation.currentLocation();
-      console.log(Geolocation.currentLocation().coords.latitude);
-      console.log(Geolocation.currentLocation().coords.longitude);
 
-      var latitude = location.coords.latitude;
-      var longitude = location.coords.longitude;
+      if (location) {
+        console.log(Geolocation.currentLocation().coords.latitude);
+        console.log(Geolocation.currentLocation().coords.longitude);
 
-      Session.set('latitude', latitude);
-      Session.set('longitude', longitude);
+        var latitude = location.coords.latitude;
+        var longitude = location.coords.longitude;
 
+        Session.set('latitude', latitude);
+        Session.set('longitude', longitude);
+      };
     }
   });
 }
