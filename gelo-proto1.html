@@ -3,12 +3,16 @@
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
+  <main>
+    <h1>Welcome to gelo-proto1</h1>
 
-  {{> latlong}}
+    {{> location}}
+  </main>
 </body>
 
-<template name="latlong">
+<template name="location">
+  <p>The latitude is: {{latitude}}</p>
+  <p>The longitude is: {{longitude}}</p>
+
   <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
 </template>

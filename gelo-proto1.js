@@ -1,17 +1,28 @@
 if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
+  Session.setDefault('latitude', "Loading");
+  Session.setDefault('longitude', "Loading");
 
-  Template.latlong.helpers({
-    counter: function () {
-      return Session.get('counter');
+  Template.location.helpers({
+    latitude: function () {
+      return Session.get('latitude');
+    },
+    longitude: function () {
+      return Session.get('longitude');
     }
   });
 
-  Template.latlong.events({
+  Template.location.events({
     'click button': function () {
-      // increment the counter when button is clicked
-      Session.set('counter', Session.get('counter') + 1);
+      var location = Geolocation.currentLocation();
+      console.log(Geolocation.currentLocation().coords.latitude);
+      console.log(Geolocation.currentLocation().coords.longitude);
+
+      var latitude = location.coords.latitude;
+      var longitude = location.coords.longitude;
+
+      Session.set('latitude', latitude);
+      Session.set('longitude', longitude);
+
     }
   });
 }
