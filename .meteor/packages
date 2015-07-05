@@ -8,3 +8,5 @@ meteor-platform
 autopublish
 insecure
 dburles:google-maps
+accounts-facebook
+service-configuration
