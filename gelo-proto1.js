@@ -60,8 +60,12 @@ if (Meteor.isClient) {
 
         // Map initialization options
         var latest = Positions.findOne({}, {sort: {timestamp: -1}});
-        lat = latest.lat + (Math.random()/1000);
-        lng = latest.lng + (Math.random()/1000);
+
+        // Wrap in 'if' statement to reduce errors when 'clear' happens
+        if (Positions.find().count() > 0) {
+          lat = latest.lat + (Math.random()/1000);
+          lng = latest.lng + (Math.random()/1000);
+        }
 
         return {
           center: new google.maps.LatLng(lat, lng),
