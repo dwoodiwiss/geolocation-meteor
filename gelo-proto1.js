@@ -20,7 +20,7 @@ if (Meteor.isClient) {
   Template.position.events({
     'click .clear': function(){
       console.log(Positions.find().count() + " entries have been removed.");
-      Meteor.call('clearAllData');
+      Meteor.call('clearPositionsData');
     }
   });
 
@@ -30,7 +30,7 @@ if (Meteor.isClient) {
       navigator.geolocation.getCurrentPosition(function(position) {
         if (Positions.find().count() > 100) {
           console.log(Positions.find().count() + " entries have been removed.");
-          Meteor.call('clearAllData');
+          Meteor.call('clearPositionsData');
         }
         else {
           console.log(Positions.find().count() + " entries are in mongodb.");
@@ -44,29 +44,27 @@ if (Meteor.isClient) {
           Session.set('longitude', longitude);
           Session.set('timestamp', date);
 
-          position = { latitude: latitude, longitude: longitude, timestamp: timestamp };
+          position = { lat: latitude, lng: longitude, timestamp: timestamp };
           console.log(position);
           Positions.insert(position);
         }
-
       });
     }, 2000);
   });
 
   // Google Maps Related
   Template.body.helpers({
-
     exampleMapOptions: function() {
-      var tot = Positions.find().count();
-      var lat = Positions.findOne().latitude;
-      var lon = Positions.findOne().longitude;
-
       // Make sure the maps API has loaded
       if (GoogleMaps.loaded()) {
+
         // Map initialization options
+        var latest = Positions.findOne({}, {sort: {timestamp: -1}});
+        lat = latest.lat + (Math.random()/1000);
+        lng = latest.lng + (Math.random()/1000);
+
         return {
-          center: new google.maps.LatLng(lat, lon),
-          // center: new google.maps.LatLng(-37.8136, 144.9631),
+          center: new google.maps.LatLng(lat, lng),
           zoom: 18
         };
       }
@@ -76,11 +74,23 @@ if (Meteor.isClient) {
   Template.body.onCreated(function() {
     // We can use the `ready` callback to interact with the map API once the map is ready.
     GoogleMaps.ready('exampleMap', function(map) {
+
       // Add a marker to the map once it's ready
+      console.log('map drawn');
       var marker = new google.maps.Marker({
-        position: map.options.center,
+        // position: map.options.center,
+        position: new google.maps.LatLng(lat, lng),
         map: map.instance
       });
+
+      Meteor.setInterval(function() {
+        marker.setPosition({lat: lat, lng: lng});
+      }, 2000);
+
+
+      // GoogleMaps.exampleMap.panTo(map.options.center);
+      // new google.maps.Marker({position: {lat: -34, lng: 151}, map: 'exampleMap'});
+      // marker.setPosition({lat: Positions.findOne().latitude+(Math.random() / 4), lng: Positions.findOne().longitude+(Math.random() / 4)});
     });
   });
 
@@ -90,7 +100,7 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
   Meteor.startup(function () {
     return Meteor.methods({
-      clearAllData: function() {
+      clearPositionsData: function() {
         return Positions.remove({});
       }
     });
