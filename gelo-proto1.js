@@ -112,6 +112,35 @@ if (Meteor.isClient) {
     });
   });
 
+  // Facebook Login Related
+  // ServiceConfiguration.configurations.remove({
+  //   service: 'facebook'
+  // });
+
+  ServiceConfiguration.configurations.insert({
+    service: 'facebook',
+    appId: '829421040471531',
+    secret: 'd8d13ddf0299d2a10a29135f20b2aa58'
+  });
+
+  Template.login.events({
+    'click #facebook-login': function(event) {
+      Meteor.loginWithFacebook({}, function(err){
+        if (err) {
+          throw new Meteor.Error("Facebook login failed");
+        }
+      });
+    },
+
+    'click #logout': function(event) {
+      Meteor.logout(function(err){
+        if (err) {
+          throw new Meteor.Error("Logout failed");
+        }
+      })
+    }
+  });
+
 
 }
 
