@@ -8,3 +8,4 @@ meteor-platform
 autopublish
 insecure
 mdg:geolocation
+dburles:google-maps

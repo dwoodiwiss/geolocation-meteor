@@ -6,12 +6,14 @@
   <main>
     <h1>Welcome to gelo-proto1</h1>
 
-    {{> location}}
+    {{> position}}
   </main>
 </body>
 
-<template name="location">
+<template name="position">
   <p>The latitude is: <span>{{latitude}}</span></p>
   <p>The longitude is: <span>{{longitude}}</span></p>
   <p>The timestamp is: <span>{{timestamp}}</span></p>
+
+  <button class="clear">Clear</button>
 </template>
