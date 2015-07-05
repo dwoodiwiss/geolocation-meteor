@@ -4,9 +4,17 @@
 
 <body>
   <main>
-    <h1>Welcome to gelo-proto1</h1>
+    <section class="info">
+      <h1>Welcome to gelo-proto1</h1>
 
-    {{> position}}
+      {{> position}}
+    </section>
+
+    <section class="map">
+      <div class="map-container">
+        {{> googleMap name="exampleMap" options=exampleMapOptions}}
+      </div>
+    </section>
   </main>
 </body>
 
@@ -16,4 +24,7 @@
   <p>The timestamp is: <span>{{timestamp}}</span></p>
 
   <button class="clear">Clear</button>
+  <br>
+  <small>Take a look at the dev console.</small>
 </template>
+
