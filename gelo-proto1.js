@@ -1,4 +1,5 @@
 Positions = new Mongo.Collection('positions');
+polling = true;
 
 if (Meteor.isClient) {
   Session.setDefault('latitude', "Loading...");
@@ -21,34 +22,47 @@ if (Meteor.isClient) {
     'click .clear': function(){
       console.log(Positions.find().count() + " entries have been removed.");
       Meteor.call('clearPositionsData');
+    },
+
+    'click .startStop': function(){
+      if (polling) {
+        polling = false;
+      }
+      else if (!polling) {
+        polling = true;
+      }
+      console.log(polling);
     }
+
   });
 
   Meteor.startup(function() {
     GoogleMaps.load();
     Meteor.setInterval(function() {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        if (Positions.find().count() > 100) {
-          console.log(Positions.find().count() + " entries have been removed.");
-          Meteor.call('clearPositionsData');
-        }
-        else {
-          console.log(Positions.find().count() + " entries are in mongodb.");
+      if (polling) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          if (Positions.find().count() > 100) {
+            console.log(Positions.find().count() + " entries have been removed.");
+            Meteor.call('clearPositionsData');
+          }
+          else {
+            console.log(Positions.find().count() + " entries are in mongodb.");
 
-          var latitude = position.coords.latitude;
-          var longitude = position.coords.longitude;
-          var timestamp = position.timestamp;
-          var date = new Date(timestamp);
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var timestamp = position.timestamp;
+            var date = new Date(timestamp);
 
-          Session.set('latitude', latitude);
-          Session.set('longitude', longitude);
-          Session.set('timestamp', date);
+            Session.set('latitude', latitude);
+            Session.set('longitude', longitude);
+            Session.set('timestamp', date);
 
-          position = { lat: latitude, lng: longitude, timestamp: timestamp };
-          console.log(position);
-          Positions.insert(position);
-        }
-      });
+            position = { lat: latitude, lng: longitude, timestamp: timestamp };
+            console.log(position);
+            Positions.insert(position);
+          }
+        });
+      };
     }, 2000);
   });
 
@@ -63,8 +77,8 @@ if (Meteor.isClient) {
 
         // Wrap in 'if' statement to reduce errors when 'clear' happens
         if (Positions.find().count() > 0) {
-          lat = latest.lat + (Math.random()/1000);
-          lng = latest.lng + (Math.random()/1000);
+          lat = latest.lat; // + (Math.random()/1000)
+          lng = latest.lng; // + (Math.random()/1000)
         }
 
         return {

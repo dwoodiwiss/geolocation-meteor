@@ -26,6 +26,12 @@ button {
   text-transform: uppercase;
 }
 
+button:hover {
+  background-color: black;
+  border: 2px solid black;
+  color: white;
+}
+
 p {
   text-align: left;
 }
