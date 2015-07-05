@@ -1,8 +1,9 @@
 Locations = new Mongo.Collection('locations');
 
 if (Meteor.isClient) {
-  Session.setDefault('latitude', "Loading");
-  Session.setDefault('longitude', "Loading");
+  Session.setDefault('latitude', "Loading...");
+  Session.setDefault('longitude', "Loading...");
+  Session.setDefault('timestamp', "Loading...");
 
   Template.location.helpers({
     latitude: function () {
@@ -10,24 +11,28 @@ if (Meteor.isClient) {
     },
     longitude: function () {
       return Session.get('longitude');
+    },
+    timestamp: function () {
+      return Session.get('timestamp');
     }
   });
 
-  Template.location.events({
-    'click button': function () {
-      var location = Geolocation.currentLocation();
+  Meteor.startup(function() {
+    Meteor.setInterval(function() {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        console.log(position);
 
-      if (location) {
-        console.log(Geolocation.currentLocation().coords.latitude);
-        console.log(Geolocation.currentLocation().coords.longitude);
-
-        var latitude = location.coords.latitude;
-        var longitude = location.coords.longitude;
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        var timestamp = position.timestamp;
+        var date = new Date(timestamp);
 
         Session.set('latitude', latitude);
         Session.set('longitude', longitude);
-      };
-    }
+        Session.set('timestamp', date);
+
+      });
+    }, 2000);
   });
 }
 
