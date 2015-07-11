@@ -96,7 +96,6 @@ if (Meteor.isClient) {
       // Add a marker to the map once it's ready
       console.log('map drawn');
       var marker = new google.maps.Marker({
-        // position: map.options.center,
         position: new google.maps.LatLng(lat, lng),
         map: map.instance
       });
@@ -104,19 +103,10 @@ if (Meteor.isClient) {
       Meteor.setInterval(function() {
         marker.setPosition({lat: lat, lng: lng});
       }, 2000);
-
-
-      // GoogleMaps.exampleMap.panTo(map.options.center);
-      // new google.maps.Marker({position: {lat: -34, lng: 151}, map: 'exampleMap'});
-      // marker.setPosition({lat: Positions.findOne().latitude+(Math.random() / 4), lng: Positions.findOne().longitude+(Math.random() / 4)});
     });
   });
 
   // Facebook Login Related
-  // ServiceConfiguration.configurations.remove({
-  //   service: 'facebook'
-  // });
-
   ServiceConfiguration.configurations.insert({
     service: 'facebook',
     appId: '829421040471531',
@@ -140,8 +130,6 @@ if (Meteor.isClient) {
       })
     }
   });
-
-
 }
 
 if (Meteor.isServer) {
