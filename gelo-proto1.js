@@ -109,8 +109,8 @@ if (Meteor.isClient) {
   // Facebook Login Related
   ServiceConfiguration.configurations.insert({
     service: 'facebook',
-    appId: '829421040471531',
-    secret: 'd8d13ddf0299d2a10a29135f20b2aa58'
+    appId: 'YOUR-APP-ID',
+    secret: 'YOUR-APP-SECRET'
   });
 
   Template.login.events({
@@ -141,3 +141,4 @@ if (Meteor.isServer) {
     });
   });
 }
+
